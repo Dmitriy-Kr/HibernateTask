@@ -10,13 +10,16 @@ public class Trainer{
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "specialization_id")
     private TrainingType specialization;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToMany(mappedBy = "trainers")
     private List<Trainee> trainees = new ArrayList<>();
+    @OneToMany(mappedBy = "trainer", fetch = FetchType.LAZY)
+    private List<Training> trainings = new ArrayList<>();
 
     public Trainer() {
     }
@@ -60,6 +63,14 @@ public class Trainer{
         this.trainees = trainees;
     }
 
+    public List<Training> getTrainings() {
+        return trainings;
+    }
+
+    public void setTrainings(List<Training> trainings) {
+        this.trainings = trainings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,12 +78,12 @@ public class Trainer{
             return false;
         }
         Trainer trainer = (Trainer) o;
-        return getId().equals(trainer.getId()) && getSpecialization().equals(trainer.getSpecialization()) && getUser().equals(trainer.getUser()) && getTrainees().equals(trainer.getTrainees());
+        return getId().equals(trainer.getId()) && getSpecialization().equals(trainer.getSpecialization()) && getUser().equals(trainer.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getSpecialization(), getUser(), getTrainees());
+        return Objects.hash(getId(), getSpecialization(), getUser());
     }
 
     @Override
@@ -82,6 +93,7 @@ public class Trainer{
                 ", specialization=" + specialization +
                 ", user=" + user +
                 ", trainees=" + trainees +
+                ", trainings=" + trainings +
                 '}';
     }
 }

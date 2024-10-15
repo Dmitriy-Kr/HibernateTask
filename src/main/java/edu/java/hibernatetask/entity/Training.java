@@ -9,14 +9,14 @@ public class Training {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainee_id")
     private Trainee trainee;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
     private String trainingName;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainingType_id")
     private TrainingType trainingType;
     private Date trainingDay;

@@ -21,8 +21,12 @@ public class Trainee {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToMany
-    @JoinTable
+    @JoinTable(name = "trainee_trainer",
+    joinColumns = @JoinColumn(name = "trainee_id"),
+    inverseJoinColumns = @JoinColumn(name = "trainer_id"))
     private List<Trainer> trainers = new ArrayList<>();
+    @OneToMany(mappedBy = "trainee", fetch = FetchType.LAZY)
+    private List<Training> trainings = new ArrayList<>();
 
 
     public Trainee() {
@@ -74,6 +78,14 @@ public class Trainee {
         this.trainers = trainers;
     }
 
+    public List<Training> getTrainings() {
+        return trainings;
+    }
+
+    public void setTrainings(List<Training> trainings) {
+        this.trainings = trainings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,12 +93,12 @@ public class Trainee {
             return false;
         }
         Trainee trainee = (Trainee) o;
-        return getId().equals(trainee.getId()) && getDateOfBirth().equals(trainee.getDateOfBirth()) && getAddress().equals(trainee.getAddress()) && getUser().equals(trainee.getUser()) && getTrainers().equals(trainee.getTrainers());
+        return getId().equals(trainee.getId()) && getDateOfBirth().equals(trainee.getDateOfBirth()) && getAddress().equals(trainee.getAddress()) && getUser().equals(trainee.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDateOfBirth(), getAddress(), getUser(), getTrainers());
+        return Objects.hash(getId(), getDateOfBirth(), getAddress(), getUser());
     }
 
     @Override
@@ -97,6 +109,7 @@ public class Trainee {
                 ", address='" + address + '\'' +
                 ", user=" + user +
                 ", trainers=" + trainers +
+                ", trainings=" + trainings +
                 '}';
     }
 }
