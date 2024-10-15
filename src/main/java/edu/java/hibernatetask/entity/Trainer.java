@@ -21,6 +21,13 @@ public class Trainer{
     public Trainer() {
     }
 
+    public Trainer(Long id, TrainingType specialization, User user, List<Trainee> trainees) {
+        this.id = id;
+        this.specialization = specialization;
+        this.user = user;
+        this.trainees = trainees;
+    }
+
     public Long getId() {
         return id;
     }

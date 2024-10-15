@@ -21,7 +21,7 @@ public class Trainee {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToMany
-    @JoinTable()
+    @JoinTable
     private List<Trainer> trainers = new ArrayList<>();
 
 
