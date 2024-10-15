@@ -15,4 +15,5 @@ public interface TrainerRepository {
         Optional<Trainer> update(Trainer trainer);
         boolean changeStatus(Trainer trainer);
         List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName);
+        List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername);
 }

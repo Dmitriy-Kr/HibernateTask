@@ -1,6 +1,7 @@
 package edu.java.hibernatetask.repository;
 
 import edu.java.hibernatetask.entity.Trainee;
+import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 
@@ -17,4 +18,5 @@ public interface TraineeRepository {
     boolean changeStatus(Trainee trainee);
     void deleteByUsername(String Username);
     List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType);
+    Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList);
 }
