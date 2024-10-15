@@ -11,7 +11,7 @@ import java.util.Optional;
 public class TrainingTypeRepositoryImpl implements TrainingRepository {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Optional<Training> save(Training training) {

@@ -1,37 +1,28 @@
-package edu.java.hibernatetask.repository.impl;
+package edu.java.hibernatetask.service.impl;
 
 import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.TraineeRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
+import edu.java.hibernatetask.service.TraineeService;
+import org.springframework.stereotype.Service;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class TraineeRepositoryImpl implements TraineeRepository {
+@Service
+public class TraineeServiceImpl implements TraineeService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private TraineeRepository traineeRepository;
+
+    public TraineeServiceImpl(TraineeRepository traineeRepository) {
+        this.traineeRepository = traineeRepository;
+    }
 
     @Override
     public Optional<Trainee> save(Trainee trainee) {
-        try {
-            entityManager.getTransaction().begin();
-
-            entityManager.persist(trainee);
-
-            entityManager.getTransaction().commit();
-
-            return Optional.of(trainee);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return Optional.empty();
     }
 
