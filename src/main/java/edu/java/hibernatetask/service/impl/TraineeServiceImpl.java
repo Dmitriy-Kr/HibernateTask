@@ -23,7 +23,7 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     public Optional<Trainee> save(Trainee trainee) {
-        return Optional.empty();
+        return traineeRepository.save(trainee);
     }
 
     @Override

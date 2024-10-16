@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.java.hibernatetask.utility.PasswordGenerator.*;
+
 @Service
 public class TrainerServiceImpl implements TrainerService {
 
@@ -21,7 +23,9 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public Optional<Trainer> save(Trainer trainer) {
-        return Optional.empty();
+
+        trainer.getUser().setPassword(generatePassword());
+        return trainerRepository.save(trainer);
     }
 
     @Override
