@@ -10,6 +10,7 @@ import java.util.Objects;
 public class TrainingType {
     @Id
     @GeneratedValue
+    @Column(name = "trainingtype_id")
     private Long id;
     @Column
     private String trainingType;

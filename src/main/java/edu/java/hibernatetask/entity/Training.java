@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Training {
     @Id
     @GeneratedValue
+    @Column(name = "training_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainee_id")

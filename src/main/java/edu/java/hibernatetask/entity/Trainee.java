@@ -11,6 +11,7 @@ import java.util.Objects;
 public class Trainee {
     @Id
     @GeneratedValue
+    @Column(name = "trainee_id")
     private Long id;
     @Column
     private Date dateOfBirth;

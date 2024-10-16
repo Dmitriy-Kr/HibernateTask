@@ -7,6 +7,7 @@ import java.util.Objects;
 public class User {
     @Id
     @GeneratedValue
+    @Column(name = "gym_user_id")
     private Long id;
     @Column
     private String firstName;
@@ -14,7 +15,7 @@ public class User {
     private String lastName;
     @Column
     private String userName;
-    @Column
+    @Column(name = "user_password")
     private String password;
     @Column
     private Boolean isActive;
