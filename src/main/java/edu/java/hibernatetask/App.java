@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Hello world!
@@ -65,6 +66,20 @@ public class App
 
         System.out.println("trainee id = " + trainee.getId());
         System.out.println("trainee user id = " + trainee.getUser().getId());
+
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("Find trainee " + (traineeService.getTraineeByUserName("Mari.Doyle").get().getUser().getPassword()));
+
+        System.out.println("---------------------------------------------------------------------------");
+        Optional<Trainee> optionalTrainee = traineeService.usernameAndPasswordMatching("Mari.Doyle", "1753799703");
+        System.out.println("Match trainee userName and password  " + (optionalTrainee.isPresent() ? optionalTrainee.get().getUser().getPassword() : "No matching!!!"));
+
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("Find trainer " + (trainerService.getTrainerByUserName("Coleman.Yates").get().getUser().getPassword()));
+
+        System.out.println("---------------------------------------------------------------------------");
+        Optional<Trainer> optionalTrainer = trainerService.usernameAndPasswordMatching("Coleman.Yates", "4415125129");
+        System.out.println("Match trainer userName and password  " + (optionalTrainer.isPresent() ? optionalTrainer.get().getUser().getPassword() : "No matching!!!"));
 
 //        entityManager.close();
 //        entityManagerFactory.close();

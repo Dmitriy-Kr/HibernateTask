@@ -1,5 +1,6 @@
 package edu.java.hibernatetask.service.impl;
 
+import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.repository.TrainerRepository;
@@ -33,12 +34,18 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public Optional<Trainer> usernameAndPasswordMatching(String userName, String password) {
+        Optional<Trainer> trainer = getTrainerByUserName(userName);
+        if(trainer.isPresent()){
+            if(password.equals(trainer.get().getUser().getPassword())){
+                return trainer;
+            }
+        }
         return Optional.empty();
     }
 
     @Override
     public Optional<Trainer> getTrainerByUserName(String userName) {
-        return Optional.empty();
+        return trainerRepository.getTrainerByUserName(userName);
     }
 
     @Override

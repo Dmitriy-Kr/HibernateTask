@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface TraineeRepository {
     Optional<Trainee> save(Trainee trainee);
-    Optional<Trainee> usernameAndPasswordMatching(String userName, String password);
     Optional<Trainee> getTraineeByUserName(String userName);
     void changePassword(Trainee trainee);
     Optional<Trainee> update(Trainee trainer);

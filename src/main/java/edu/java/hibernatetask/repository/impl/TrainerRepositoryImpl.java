@@ -1,12 +1,10 @@
 package edu.java.hibernatetask.repository.impl;
 
+import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.repository.TrainerRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -53,7 +51,15 @@ public class TrainerRepositoryImpl implements TrainerRepository {
 
     @Override
     public Optional<Trainer> getTrainerByUserName(String userName) {
-        return Optional.empty();
+        Query query = entityManager.createQuery("SELECT t FROM Trainer as t WHERE t.user.userName = :userName", Trainer.class);
+        query.setParameter("userName", userName);
+        Trainer trainer = null;
+        try {
+            trainer = (Trainer) query.getSingleResult();
+        } catch (NoResultException e){
+            logger.error("No such Trainer present in the database with userName {}", userName);
+        }
+        return trainer != null ? Optional.of(trainer) : Optional.empty();
     }
 
     @Override

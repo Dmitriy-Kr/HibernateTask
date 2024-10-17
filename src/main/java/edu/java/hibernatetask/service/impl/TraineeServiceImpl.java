@@ -35,12 +35,18 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     public Optional<Trainee> usernameAndPasswordMatching(String userName, String password) {
+        Optional<Trainee> trainee = getTraineeByUserName(userName);
+        if(trainee.isPresent()){
+            if(password.equals(trainee.get().getUser().getPassword())){
+                return trainee;
+            }
+        }
         return Optional.empty();
     }
 
     @Override
     public Optional<Trainee> getTraineeByUserName(String userName) {
-        return Optional.empty();
+        return traineeRepository.getTraineeByUserName(userName);
     }
 
     @Override
