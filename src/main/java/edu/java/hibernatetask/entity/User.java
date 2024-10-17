@@ -6,7 +6,7 @@ import java.util.Objects;
 @Table(name = "gym_user")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gym_user_id")
     private Long id;
     @Column

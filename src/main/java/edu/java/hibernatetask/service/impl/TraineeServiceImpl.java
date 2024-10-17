@@ -6,23 +6,30 @@ import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.TraineeRepository;
 import edu.java.hibernatetask.service.TraineeService;
+import edu.java.hibernatetask.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.java.hibernatetask.utility.PasswordGenerator.generatePassword;
+
 @Service
 public class TraineeServiceImpl implements TraineeService {
 
     private TraineeRepository traineeRepository;
+    private UserService userService;
 
-    public TraineeServiceImpl(TraineeRepository traineeRepository) {
+    public TraineeServiceImpl(TraineeRepository traineeRepository, UserService userService) {
         this.traineeRepository = traineeRepository;
+        this.userService = userService;
     }
 
     @Override
     public Optional<Trainee> save(Trainee trainee) {
+        trainee.getUser().setUserName(createValidUserName(trainee));
+        trainee.getUser().setPassword(generatePassword());
         return traineeRepository.save(trainee);
     }
 
@@ -64,5 +71,23 @@ public class TraineeServiceImpl implements TraineeService {
     @Override
     public Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList) {
         return Optional.empty();
+    }
+
+    private String createValidUserName(Trainee trainee) {
+
+        String userName = trainee.getUser().getFirstName() + "." + trainee.getUser().getLastName();
+
+        if (userService.getUserByUserName(userName).isEmpty()) {
+            return userName;
+        }
+
+        for (long i = 0; i < Long.MAX_VALUE; i++) {
+            StringBuilder newUserName = new StringBuilder(userName + i);
+            if (userService.getUserByUserName(newUserName.toString()).isEmpty()) {
+                return newUserName.toString();
+            }
+        }
+
+        return userName;
     }
 }

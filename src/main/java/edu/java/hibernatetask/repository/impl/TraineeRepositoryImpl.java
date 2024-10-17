@@ -6,6 +6,8 @@ import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.TraineeRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import java.sql.Date;
@@ -15,8 +17,14 @@ import java.util.Optional;
 @Repository
 public class TraineeRepositoryImpl implements TraineeRepository {
 
-    @PersistenceContext
     private EntityManager entityManager;
+
+    private EntityManagerFactory entityManagerFactory;
+
+    {
+        entityManagerFactory = Persistence.createEntityManagerFactory("gym");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
 
     @Override
     public Optional<Trainee> save(Trainee trainee) {

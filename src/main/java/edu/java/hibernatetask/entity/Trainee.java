@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 public class Trainee {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trainee_id")
     private Long id;
     @Column
@@ -18,8 +18,8 @@ public class Trainee {
     @Column
     private String address;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "gym_user_id")
     private User user;
     @ManyToMany
     @JoinTable(name = "trainee_trainer",
