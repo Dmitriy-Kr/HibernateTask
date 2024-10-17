@@ -4,7 +4,7 @@
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
 
-    <persistence-unit name="gym" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="hibernate" transaction-type="RESOURCE_LOCAL">
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
@@ -17,13 +17,13 @@
         <properties>
             <property name="hibernate.jdbc.time_zone" value="UTC"/>
             <property name ="hibernate.show_sql" value = "true" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gymcrm"/>
-            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="K50ABseries"/>
-            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
-            <property name="jakarta.persistence.sql-load-script-source" value="data.sql"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gymcrm"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="K50ABseries"/>
+            <property name="javax.persistence.schema-generation.database.action" value="none"/>
+            <property name="javax.persistence.sql-load-script-source" value="data.sql"/>
         </properties>
     </persistence-unit>
 </persistence>

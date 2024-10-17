@@ -1,6 +1,9 @@
 package edu.java.hibernatetask.entity;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -21,12 +24,14 @@ public class Trainee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_user_id")
     private User user;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "trainee_trainer",
     joinColumns = @JoinColumn(name = "trainee_id"),
     inverseJoinColumns = @JoinColumn(name = "trainer_id"))
     private List<Trainer> trainers = new ArrayList<>();
-    @OneToMany(mappedBy = "trainee", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainee", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Training> trainings = new ArrayList<>();
 
 
@@ -109,7 +114,7 @@ public class Trainee {
                 ", dateOfBirth=" + dateOfBirth +
                 ", address='" + address + '\'' +
                 ", user=" + user +
-                ", trainers=" + trainers +
+//                ", trainers=" + trainers.size() +
                 ", trainings=" + trainings +
                 '}';
     }

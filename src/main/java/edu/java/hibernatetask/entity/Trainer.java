@@ -1,6 +1,9 @@
 package edu.java.hibernatetask.entity;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +14,17 @@ public class Trainer{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trainer_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specialization_id")
     private TrainingType specialization;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_user_id")
     private User user;
-    @ManyToMany(mappedBy = "trainers")
+    @ManyToMany(mappedBy = "trainers", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Trainee> trainees = new ArrayList<>();
-    @OneToMany(mappedBy = "trainer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainer", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Training> trainings = new ArrayList<>();
 
     public Trainer() {
@@ -93,7 +98,7 @@ public class Trainer{
                 "id=" + id +
                 ", specialization=" + specialization +
                 ", user=" + user +
-                ", trainees=" + trainees +
+//                ", trainees=" + trainees.size() +
                 ", trainings=" + trainings +
                 '}';
     }

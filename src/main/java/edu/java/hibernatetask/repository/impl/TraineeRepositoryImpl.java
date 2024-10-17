@@ -2,35 +2,31 @@ package edu.java.hibernatetask.repository.impl;
 
 import edu.java.hibernatetask.entity.*;
 import edu.java.hibernatetask.repository.TraineeRepository;
-import jakarta.persistence.*;
+
+import javax.persistence.*;
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class TraineeRepositoryImpl implements TraineeRepository {
-
+    @PersistenceContext(name = "hibernate")
     private EntityManager entityManager;
 
-    private EntityManagerFactory entityManagerFactory;
     private static Logger logger = LoggerFactory.getLogger(TraineeRepositoryImpl.class);
-
-    {
-        entityManagerFactory = Persistence.createEntityManagerFactory("gym");
-        entityManager = entityManagerFactory.createEntityManager();
-    }
 
     @Override
     public Optional<Trainee> save(Trainee trainee) {
         try {
-            entityManager.getTransaction().begin();
 
             entityManager.persist(trainee);
-
-            entityManager.getTransaction().commit();
 
             return Optional.of(trainee);
 
@@ -47,20 +43,27 @@ public class TraineeRepositoryImpl implements TraineeRepository {
         Trainee trainee = null;
         try {
             trainee = (Trainee) query.getSingleResult();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             logger.error("No such Trainee present in the database with userName {}", userName);
         }
         return trainee != null ? Optional.of(trainee) : Optional.empty();
     }
 
     @Override
-    public void changePassword(Trainee trainee) {
+    public Optional<Trainee> changePassword(Trainee trainee) {
+        Trainee traineeFromDB = entityManager.find(Trainee.class, trainee.getId());
+        if (traineeFromDB != null) {
+            traineeFromDB.getUser().setPassword(trainee.getUser().getPassword());
+            trainee = entityManager.merge(traineeFromDB);
+        }
 
+        return Optional.ofNullable(trainee);
     }
 
     @Override
-    public Optional<Trainee> update(Trainee trainer) {
-        return Optional.empty();
+    public Optional<Trainee> update(Trainee trainee) {
+        entityManager.merge(trainee);
+        return Optional.ofNullable(trainee);
     }
 
     @Override

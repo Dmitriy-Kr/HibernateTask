@@ -50,13 +50,13 @@ public class TraineeServiceImpl implements TraineeService {
     }
 
     @Override
-    public void changePassword(Trainee trainee) {
-
+    public  Optional<Trainee> changePassword(Trainee trainee) {
+        return traineeRepository.changePassword(trainee);
     }
 
     @Override
-    public Optional<Trainee> update(Trainee trainer) {
-        return Optional.empty();
+    public Optional<Trainee> update(Trainee trainee) {
+        return traineeRepository.update(trainee);
     }
 
     @Override

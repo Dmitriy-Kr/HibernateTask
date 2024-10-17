@@ -1,6 +1,6 @@
 package edu.java.hibernatetask.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.sql.Date;
 import java.util.Objects;
@@ -111,8 +111,8 @@ public class Training {
     public String toString() {
         return "Training{" +
                 "id=" + id +
-                ", trainee=" + trainee +
-                ", trainer=" + trainer +
+                ", trainee=" + trainee.getUser().getUserName() +
+                ", trainer=" + trainer.getUser().getUserName() +
                 ", trainingName='" + trainingName + '\'' +
                 ", trainingType=" + trainingType +
                 ", trainingDay=" + trainingDay +

@@ -7,13 +7,8 @@ import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.entity.User;
 import edu.java.hibernatetask.service.TraineeService;
 import edu.java.hibernatetask.service.TrainerService;
-import edu.java.hibernatetask.service.impl.TrainerServiceImpl;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import edu.java.hibernatetask.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -33,6 +28,9 @@ public class App
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
 
         TrainerService trainerService = context.getBean("trainerServiceImpl", TrainerService.class);
+//        UserService userService = context.getBean("userServiceImpl", UserService.class);
+//
+//        System.out.println(userService.getUserByUserName("Coleman.Yates"));
 
         System.out.println( "Hello World!" );
         Trainer trainer = new Trainer();
@@ -80,6 +78,13 @@ public class App
         System.out.println("---------------------------------------------------------------------------");
         Optional<Trainer> optionalTrainer = trainerService.usernameAndPasswordMatching("Coleman.Yates", "4415125129");
         System.out.println("Match trainer userName and password  " + (optionalTrainer.isPresent() ? optionalTrainer.get().getUser().getPassword() : "No matching!!!"));
+
+        System.out.println("----------------------------------Trainee Change password-----------------------------------------");
+
+        trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
+        System.out.println(trainee);
+        trainee.getUser().setPassword("99KKAA8978");
+        System.out.println(traineeService.changePassword(trainee));
 
 //        entityManager.close();
 //        entityManagerFactory.close();

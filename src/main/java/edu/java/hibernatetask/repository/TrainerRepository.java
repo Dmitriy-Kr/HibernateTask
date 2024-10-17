@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface TrainerRepository {
         Optional<Trainer> save(Trainer trainer);
-        Optional<Trainer> usernameAndPasswordMatching(String userName, String password);
         Optional<Trainer> getTrainerByUserName(String userName);
         void changePassword(Trainer trainer);
         Optional<Trainer> update(Trainer trainer);

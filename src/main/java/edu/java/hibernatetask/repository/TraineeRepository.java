@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface TraineeRepository {
     Optional<Trainee> save(Trainee trainee);
     Optional<Trainee> getTraineeByUserName(String userName);
-    void changePassword(Trainee trainee);
+    Optional<Trainee> changePassword(Trainee trainee);
     Optional<Trainee> update(Trainee trainer);
     boolean changeStatus(Trainee trainee);
     void deleteByUsername(String Username);
