@@ -1,28 +1,30 @@
 package edu.java.hibernatetask.repository.impl;
 
 import edu.java.hibernatetask.entity.Training;
+import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.TrainingRepository;
+import edu.java.hibernatetask.repository.TrainingTypeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class TrainingTypeRepositoryImpl implements TrainingRepository {
+public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public Optional<Training> save(Training training) {
+    public Optional<TrainingType> save(TrainingType trainingType) {
         try {
             entityManager.getTransaction().begin();
 
-            entityManager.persist(training);
+            entityManager.persist(trainingType);
 
             entityManager.getTransaction().commit();
 
-            return Optional.of(training);
+            return Optional.of(trainingType);
 
         } catch (Exception e) {
             e.printStackTrace();

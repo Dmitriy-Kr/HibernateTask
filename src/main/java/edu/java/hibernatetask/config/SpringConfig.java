@@ -6,6 +6,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan("edu.java.hibernatetask")
-@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.properties")
 public class SpringConfig {
 }

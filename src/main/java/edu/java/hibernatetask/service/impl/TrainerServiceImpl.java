@@ -4,6 +4,7 @@ import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.repository.TrainerRepository;
 import edu.java.hibernatetask.service.TrainerService;
+import edu.java.hibernatetask.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -16,14 +17,16 @@ import static edu.java.hibernatetask.utility.PasswordGenerator.*;
 public class TrainerServiceImpl implements TrainerService {
 
     private TrainerRepository trainerRepository;
+    private UserService userService;
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository, UserService userService) {
         this.trainerRepository = trainerRepository;
+        this.userService = userService;
     }
 
     @Override
     public Optional<Trainer> save(Trainer trainer) {
-
+        trainer.getUser().setUserName(createValidUserName(trainer));
         trainer.getUser().setPassword(generatePassword());
         return trainerRepository.save(trainer);
     }
@@ -61,5 +64,23 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername) {
         return null;
+    }
+
+    private String createValidUserName(Trainer trainer) {
+
+        String userName = trainer.getUser().getFirstName() + "." + trainer.getUser().getLastName();
+
+        if (userService.getUserByUserName(userName).isEmpty()) {
+            return userName;
+        }
+
+        for (long i = 0; i < Long.MAX_VALUE; i++) {
+            StringBuilder newUserName = new StringBuilder(userName + i);
+            if (userService.getUserByUserName(newUserName.toString()).isEmpty()) {
+                return newUserName.toString();
+            }
+        }
+
+        return userName;
     }
 }

@@ -4,7 +4,11 @@ import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.repository.TrainerRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.util.List;
@@ -12,8 +16,17 @@ import java.util.Optional;
 
 @Repository
 public class TrainerRepositoryImpl implements TrainerRepository {
-    @PersistenceContext
+//    @PersistenceContext
     private EntityManager entityManager;
+
+    private EntityManagerFactory entityManagerFactory;
+
+    {
+        entityManagerFactory = Persistence.createEntityManagerFactory("gym");
+        entityManager = entityManagerFactory.createEntityManager();
+    }
+
+    private static Logger logger = LoggerFactory.getLogger(TrainerRepositoryImpl.class);
 
     @Override
     public Optional<Trainer> save(Trainer trainer) {
@@ -27,6 +40,7 @@ public class TrainerRepositoryImpl implements TrainerRepository {
             return Optional.of(trainer);
 
         } catch (Exception e) {
+            logger.error("Error save Trainer in the database", e);
             e.printStackTrace();
         }
         return Optional.empty();

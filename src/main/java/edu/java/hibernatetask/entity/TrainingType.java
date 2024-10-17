@@ -22,6 +22,11 @@ public class TrainingType {
         this.trainingType = trainingType;
     }
 
+    public TrainingType(Long id, String trainingType) {
+        this.id = id;
+        this.trainingType = trainingType;
+    }
+
     public String getTrainingType() {
         return trainingType;
     }

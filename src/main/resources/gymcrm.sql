@@ -116,5 +116,3 @@ INSERT INTO Training (training_id, trainee_id, trainer_id, trainingName, trainin
 	(3, 3, 3, 'Zumba step', 3, '2024-08-27', 60),
 	(4, 4, 1, 'vinyasa', 1, '2024-09-30', 150),
 	(5, 5, 4, 'dynamic stretching', 4, '2024-11-07', 60)
-
-SELECT * FROM gym_user;
