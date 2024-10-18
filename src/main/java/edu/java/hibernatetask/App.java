@@ -108,7 +108,7 @@ public class App
         trainer.getUser().setPassword(password);
         System.out.println(trainerService.changePassword(trainer));
 
-        System.out.println("----------------------------------Trainer update-----------------------------------------");
+        System.out.println("----------------------------------Trainer update-----------------------------------------\n");
 
         trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
         System.out.println(trainer);
@@ -123,6 +123,20 @@ public class App
         } catch (ServiceException e) {
             e.printStackTrace();
         }
+
+        System.out.println("---------------------------------- Trainee update -----------------------------------------\n");
+
+        trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
+        System.out.println(trainee);
+
+        trainee.getUser().setFirstName("Irina");
+        trainee.getUser().setLastName("Ortega");
+        trainee.getUser().setUserName("Cow");
+
+        trainee.setDateOfBirth(Date.valueOf(LocalDate.parse("2005-10-16")));
+        trainee.setAddress("Serova st, 256, ap 45");
+
+            System.out.println(traineeService.update(trainee));
 
 //        entityManager.close();
 //        entityManagerFactory.close();

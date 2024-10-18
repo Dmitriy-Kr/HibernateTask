@@ -114,7 +114,6 @@ public class Trainee {
                 ", dateOfBirth=" + dateOfBirth +
                 ", address='" + address + '\'' +
                 ", user=" + user +
-//                ", trainers=" + trainers.size() +
                 ", trainings=" + trainings +
                 '}';
     }

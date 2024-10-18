@@ -76,6 +76,8 @@ public class TrainerRepositoryImpl implements TrainerRepository {
             trainerFromDB.setSpecialization(trainer.getSpecialization());
 
             trainer = entityManager.merge(trainerFromDB);
+        }else{
+            return Optional.empty();
         }
 
         return Optional.ofNullable(trainer);

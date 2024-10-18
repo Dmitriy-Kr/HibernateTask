@@ -62,7 +62,21 @@ public class TraineeRepositoryImpl implements TraineeRepository {
 
     @Override
     public Optional<Trainee> update(Trainee trainee) {
-        entityManager.merge(trainee);
+        Trainee traineeFromDB = entityManager.find(Trainee.class, trainee.getId());
+        if (traineeFromDB != null) {
+
+            traineeFromDB.getUser().setFirstName(trainee.getUser().getFirstName());
+            traineeFromDB.getUser().setLastName(trainee.getUser().getLastName());
+            traineeFromDB.getUser().setUserName(trainee.getUser().getUserName());
+
+            traineeFromDB.setDateOfBirth(trainee.getDateOfBirth());
+            traineeFromDB.setAddress(trainee.getAddress());
+
+            trainee = entityManager.merge(traineeFromDB);
+        } else{
+            return Optional.empty();
+        }
+
         return Optional.ofNullable(trainee);
     }
 
