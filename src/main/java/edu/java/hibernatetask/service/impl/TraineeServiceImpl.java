@@ -66,7 +66,7 @@ public class TraineeServiceImpl implements TraineeService {
         try {
             return traineeRepository.changeStatus(trainee);
         } catch (DBException e) {
-            throw new ServiceException("Fail to change status", e);
+            throw new ServiceException("Fail to change trainee status", e);
         }
     }
 

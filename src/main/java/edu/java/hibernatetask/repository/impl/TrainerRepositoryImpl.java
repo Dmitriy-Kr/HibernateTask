@@ -3,6 +3,7 @@ package edu.java.hibernatetask.repository.impl;
 import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
+import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,8 +85,20 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     }
 
     @Override
-    public boolean changeStatus(Trainer trainer) {
-        return false;
+    public boolean changeStatus(Trainer trainer) throws DBException {
+        Trainer trainerFromDB = entityManager.find(Trainer.class, trainer.getId());
+        if (trainerFromDB != null) {
+
+            trainerFromDB.getUser().setIsActive(!trainerFromDB.getUser().isActive());
+
+            trainer = entityManager.merge(trainerFromDB);
+
+        } else {
+            logger.error("No such Trainer present in the database with id {}", trainer.getId());
+            throw new DBException("No such Trainer present in the database with id " + trainer.getId());
+        }
+
+        return trainer.getUser().isActive();
     }
 
     @Override

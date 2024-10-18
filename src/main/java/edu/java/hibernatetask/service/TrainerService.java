@@ -14,7 +14,7 @@ public interface TrainerService {
         Optional<Trainer> getTrainerByUserName(String userName);
         Optional<Trainer> changePassword(Trainer trainer);
         Optional<Trainer> update(Trainer trainer) throws ServiceException;
-        boolean changeStatus(Trainer trainer);
+        boolean changeStatus(Trainer trainer) throws ServiceException;
         List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName);
         List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername);
 }

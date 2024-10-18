@@ -3,6 +3,7 @@ package edu.java.hibernatetask.service.impl;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
+import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainerRepository;
 import edu.java.hibernatetask.repository.impl.TrainerRepositoryImpl;
 import edu.java.hibernatetask.service.ServiceException;
@@ -77,8 +78,12 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public boolean changeStatus(Trainer trainer) {
-        return false;
+    public boolean changeStatus(Trainer trainer) throws ServiceException {
+        try {
+            return trainerRepository.changeStatus(trainer);
+        } catch (DBException e) {
+            throw new ServiceException("Fail to change trainer status", e);
+        }
     }
 
     @Override
