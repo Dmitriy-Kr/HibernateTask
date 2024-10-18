@@ -1,11 +1,11 @@
-package edu.java.hibernatetask.repository;
+package edu.java.hibernatetask.service;
 
 import edu.java.hibernatetask.entity.TrainingType;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TrainingTypeRepository {
+public interface TrainingTypeService {
     Optional<TrainingType> getByName(String trainingType);
     Optional<TrainingType> getById(Long id);
     List<TrainingType> getAll();

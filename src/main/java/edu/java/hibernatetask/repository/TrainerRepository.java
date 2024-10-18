@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface TrainerRepository {
         Optional<Trainer> save(Trainer trainer);
         Optional<Trainer> getTrainerByUserName(String userName);
-        void changePassword(Trainer trainer);
+        Optional<Trainer> changePassword(Trainer trainer);
         Optional<Trainer> update(Trainer trainer);
         boolean changeStatus(Trainer trainer);
         List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName);

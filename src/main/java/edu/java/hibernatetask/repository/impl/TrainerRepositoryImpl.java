@@ -1,5 +1,6 @@
 package edu.java.hibernatetask.repository.impl;
 
+import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.repository.TrainerRepository;
@@ -53,13 +54,31 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     }
 
     @Override
-    public void changePassword(Trainer trainer) {
+    public Optional<Trainer> changePassword(Trainer trainer) {
+        Trainer trainerFromDB = entityManager.find(Trainer.class, trainer.getId());
+        if (trainerFromDB != null) {
+            trainerFromDB.getUser().setPassword(trainer.getUser().getPassword());
+            trainer = entityManager.merge(trainerFromDB);
+        }
 
+        return Optional.ofNullable(trainer);
     }
 
     @Override
     public Optional<Trainer> update(Trainer trainer) {
-        return Optional.empty();
+        Trainer trainerFromDB = entityManager.find(Trainer.class, trainer.getId());
+        if (trainerFromDB != null) {
+
+            trainerFromDB.getUser().setFirstName(trainer.getUser().getFirstName());
+            trainerFromDB.getUser().setLastName(trainer.getUser().getLastName());
+            trainerFromDB.getUser().setUserName(trainer.getUser().getUserName());
+
+            trainerFromDB.setSpecialization(trainer.getSpecialization());
+
+            trainer = entityManager.merge(trainerFromDB);
+        }
+
+        return Optional.ofNullable(trainer);
     }
 
     @Override

@@ -1,28 +1,37 @@
 package edu.java.hibernatetask.service.impl;
 
-import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
+import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.TrainerRepository;
+import edu.java.hibernatetask.repository.impl.TrainerRepositoryImpl;
+import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TrainerService;
+import edu.java.hibernatetask.service.TrainingTypeService;
 import edu.java.hibernatetask.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static edu.java.hibernatetask.utility.PasswordGenerator.*;
+import static edu.java.hibernatetask.utility.PasswordGenerator.generatePassword;
 
 @Service
 public class TrainerServiceImpl implements TrainerService {
 
     private TrainerRepository trainerRepository;
     private UserService userService;
+    private TrainingTypeService trainingTypeService;
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository, UserService userService) {
+    private static Logger logger = LoggerFactory.getLogger(TrainerServiceImpl.class);
+
+    public TrainerServiceImpl(TrainerRepository trainerRepository, UserService userService, TrainingTypeService trainingTypeService) {
         this.trainerRepository = trainerRepository;
         this.userService = userService;
+        this.trainingTypeService = trainingTypeService;
     }
 
     @Override
@@ -49,13 +58,22 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public void changePassword(Trainer trainer) {
-
+    public Optional<Trainer> changePassword(Trainer trainer) {
+        return trainerRepository.changePassword(trainer);
     }
 
     @Override
-    public Optional<Trainer> update(Trainer trainer) {
-        return Optional.empty();
+    public Optional<Trainer> update(Trainer trainer) throws ServiceException {
+        Optional<TrainingType> checkedTrainingType = trainingTypeService.getByName(trainer.getSpecialization().getTrainingType());
+
+        if(checkedTrainingType.isEmpty()){
+            logger.error("No such training type in DB {}", trainer.getSpecialization().getTrainingType());
+            throw new ServiceException("No such training type in DB");
+        }
+
+        trainer.setSpecialization(checkedTrainingType.get());
+
+        return trainerRepository.update(trainer);
     }
 
     @Override

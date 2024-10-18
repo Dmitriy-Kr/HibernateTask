@@ -32,6 +32,14 @@ public class TrainingType {
         this.trainingType = trainingType;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,18 +47,19 @@ public class TrainingType {
             return false;
         }
         TrainingType that = (TrainingType) o;
-        return getTrainingType().equals(that.getTrainingType());
+        return getId().equals(that.getId()) && getTrainingType().equals(that.getTrainingType());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTrainingType());
+        return Objects.hash(getId(), getTrainingType());
     }
 
     @Override
     public String toString() {
         return "TrainingType{" +
-                "trainingType='" + trainingType + '\'' +
+                "id=" + id +
+                ", trainingType='" + trainingType + '\'' +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package edu.java.hibernatetask.service;
 
+import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 
@@ -11,8 +12,8 @@ public interface TrainerService {
         Optional<Trainer> save(Trainer trainer);
         Optional<Trainer> usernameAndPasswordMatching(String userName, String password);
         Optional<Trainer> getTrainerByUserName(String userName);
-        void changePassword(Trainer trainer);
-        Optional<Trainer> update(Trainer trainer);
+        Optional<Trainer> changePassword(Trainer trainer);
+        Optional<Trainer> update(Trainer trainer) throws ServiceException;
         boolean changeStatus(Trainer trainer);
         List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName);
         List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername);

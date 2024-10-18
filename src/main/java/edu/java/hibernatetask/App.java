@@ -5,9 +5,11 @@ import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.entity.User;
+import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TraineeService;
 import edu.java.hibernatetask.service.TrainerService;
 import edu.java.hibernatetask.service.UserService;
+import edu.java.hibernatetask.utility.PasswordGenerator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.Date;
@@ -83,8 +85,44 @@ public class App
 
         trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
         System.out.println(trainee);
-        trainee.getUser().setPassword("99KKAA8978");
+        String password = PasswordGenerator.generatePassword();
+        System.out.println("New password for " + trainee.getUser().getUserName() + "   " + password);
+        trainee.getUser().setPassword(password);
         System.out.println(traineeService.changePassword(trainee));
+
+        System.out.println("----------------------------------Trainer Change password-----------------------------------------");
+
+        trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
+        System.out.println(trainer);
+        password = PasswordGenerator.generatePassword();
+        System.out.println("New password for " + trainer.getUser().getUserName() + "   " + password);
+        trainer.getUser().setPassword(password);
+        System.out.println(trainerService.changePassword(trainer));
+
+        System.out.println("----------------------------------Trainer Change password-----------------------------------------");
+
+        trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
+        System.out.println(trainer);
+        password = PasswordGenerator.generatePassword();
+        System.out.println("New password for " + trainer.getUser().getUserName() + "   " + password);
+        trainer.getUser().setPassword(password);
+        System.out.println(trainerService.changePassword(trainer));
+
+        System.out.println("----------------------------------Trainer update-----------------------------------------");
+
+        trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
+        System.out.println(trainer);
+
+        trainer.getUser().setFirstName("Dasha");
+        trainer.getUser().setLastName("Flower");
+        trainer.getUser().setUserName("Bird");
+        trainer.getSpecialization().setTrainingType("resistance");
+
+        try {
+            System.out.println(trainerService.update(trainer));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
 //        entityManager.close();
 //        entityManagerFactory.close();
