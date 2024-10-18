@@ -30,7 +30,7 @@ public class Trainee {
     joinColumns = @JoinColumn(name = "trainee_id"),
     inverseJoinColumns = @JoinColumn(name = "trainer_id"))
     private List<Trainer> trainers = new ArrayList<>();
-    @OneToMany(mappedBy = "trainee", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "trainee", fetch = FetchType.EAGER, cascade =  CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Training> trainings = new ArrayList<>();
 

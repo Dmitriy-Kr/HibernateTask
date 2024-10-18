@@ -18,12 +18,9 @@ import java.util.Optional;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
+public class App {
+    public static void main(String[] args) {
 //        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
 //        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
@@ -34,7 +31,7 @@ public class App
 //
 //        System.out.println(userService.getUserByUserName("Coleman.Yates"));
 
-        System.out.println( "Hello World!" );
+        System.out.println("Hello World!");
         Trainer trainer = new Trainer();
         trainer.setSpecialization(new TrainingType(2L, "fitness"));
         User user = new User();
@@ -68,10 +65,19 @@ public class App
         System.out.println("trainee user id = " + trainee.getUser().getId());
 
         System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Find trainee " + (traineeService.getTraineeByUserName("Mari.Doyle").get().getUser().getPassword()));
+        try {
+            System.out.println("Find trainee " + (traineeService.getTraineeByUserName("Mari.Doyle").get().getUser().getPassword()));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("---------------------------------------------------------------------------");
-        Optional<Trainee> optionalTrainee = traineeService.usernameAndPasswordMatching("Mari.Doyle", "1753799703");
+        Optional<Trainee> optionalTrainee = null;
+        try {
+            optionalTrainee = traineeService.usernameAndPasswordMatching("Mari.Doyle", "1753799703");
+        } catch (ServiceException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Match trainee userName and password  " + (optionalTrainee.isPresent() ? optionalTrainee.get().getUser().getPassword() : "No matching!!!"));
 
         System.out.println("---------------------------------------------------------------------------");
@@ -83,7 +89,11 @@ public class App
 
         System.out.println("----------------------------------Trainee Change password-----------------------------------------");
 
-        trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
+        try {
+            trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
         System.out.println(trainee);
         String password = PasswordGenerator.generatePassword();
         System.out.println("New password for " + trainee.getUser().getUserName() + "   " + password);
@@ -126,7 +136,11 @@ public class App
 
         System.out.println("---------------------------------- Trainee update -----------------------------------------\n");
 
-        trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
+        try {
+            trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
         System.out.println(trainee);
 
         trainee.getUser().setFirstName("Irina");
@@ -136,11 +150,15 @@ public class App
         trainee.setDateOfBirth(Date.valueOf(LocalDate.parse("2005-10-16")));
         trainee.setAddress("Serova st, 256, ap 45");
 
-            System.out.println(traineeService.update(trainee));
+        System.out.println(traineeService.update(trainee));
 
         System.out.println("---------------------------------- Trainee change status  -----------------------------------------\n");
 
-        trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        try {
+            trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
         System.out.println(trainee);
 
         try {
@@ -149,7 +167,11 @@ public class App
             e.printStackTrace();
         }
 
-        trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        try {
+            trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
         System.out.println(trainee);
 
         System.out.println("---------------------------------- Trainer change status  -----------------------------------------\n");
@@ -165,6 +187,28 @@ public class App
 
         trainer = trainerService.getTrainerByUserName("Kathleen.Carr").get();
         System.out.println(trainer);
+
+        System.out.println("---------------------------------- Remove Trainee  -----------------------------------------\n");
+
+        try {
+            trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+        System.out.println(trainee);
+
+        try {
+            traineeService.deleteByUsername("Dave.Batista");
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
 
 //        entityManager.close();
 //        entityManagerFactory.close();

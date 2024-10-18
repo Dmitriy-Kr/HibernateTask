@@ -6,9 +6,12 @@ import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TraineeRepository;
+import edu.java.hibernatetask.repository.impl.TraineeRepositoryImpl;
 import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TraineeService;
 import edu.java.hibernatetask.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -22,6 +25,7 @@ public class TraineeServiceImpl implements TraineeService {
 
     private TraineeRepository traineeRepository;
     private UserService userService;
+    private static Logger logger = LoggerFactory.getLogger(TraineeServiceImpl.class);
 
     public TraineeServiceImpl(TraineeRepository traineeRepository, UserService userService) {
         this.traineeRepository = traineeRepository;
@@ -32,11 +36,11 @@ public class TraineeServiceImpl implements TraineeService {
     public Optional<Trainee> save(Trainee trainee) {
         trainee.getUser().setUserName(createValidUserName(trainee));
         trainee.getUser().setPassword(generatePassword());
-        return traineeRepository.save(trainee);
+        return traineeRepository.create(trainee);
     }
 
     @Override
-    public Optional<Trainee> usernameAndPasswordMatching(String userName, String password) {
+    public Optional<Trainee> usernameAndPasswordMatching(String userName, String password) throws ServiceException {
         Optional<Trainee> trainee = getTraineeByUserName(userName);
         if(trainee.isPresent()){
             if(password.equals(trainee.get().getUser().getPassword())){
@@ -47,8 +51,13 @@ public class TraineeServiceImpl implements TraineeService {
     }
 
     @Override
-    public Optional<Trainee> getTraineeByUserName(String userName) {
-        return traineeRepository.getTraineeByUserName(userName);
+    public Optional<Trainee> getTraineeByUserName(String username) throws ServiceException {
+        try {
+            return traineeRepository.getTraineeByUserName(username);
+        } catch (DBException e) {
+            logger.error("Fail to get trainee with userName {}  from DB", username);
+            throw new ServiceException("Fail to get from DB trainee with userName " + username, e);
+        }
     }
 
     @Override
@@ -66,13 +75,32 @@ public class TraineeServiceImpl implements TraineeService {
         try {
             return traineeRepository.changeStatus(trainee);
         } catch (DBException e) {
+            logger.error("Fail to change status trainee with userName {}  ", trainee.getUser().getUserName());
             throw new ServiceException("Fail to change trainee status", e);
         }
     }
 
     @Override
-    public void deleteByUsername(String Username) {
+    public void deleteByUsername(String username) throws ServiceException {
+        Optional<Trainee> traineeFromDB = getTraineeByUserName(username);
 
+        if(traineeFromDB.isEmpty()){
+            logger.error("Fail to delete, no trainee with userName {} in DB ", username);
+            throw new ServiceException("Fail to delete, no trainee with userName {} in DB " + username);
+        }
+
+        try {
+            traineeRepository.delete(traineeFromDB.get());
+        } catch (DBException e) {
+            logger.error("Fail to delete trainee with userName {} from DB ", username);
+            throw new ServiceException("Fail to delete trainee from DB with userName" + username, e);
+        }
+        try {
+            traineeRepository.delete(traineeFromDB.get());
+        } catch (DBException e) {
+            logger.error("Fail to delete trainee with userName {} from DB ", username);
+            throw new ServiceException("Fail to delete trainee from DB with userName" + username, e);
+        }
     }
 
     @Override

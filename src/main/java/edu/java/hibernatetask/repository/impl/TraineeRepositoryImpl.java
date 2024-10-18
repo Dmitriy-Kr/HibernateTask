@@ -7,6 +7,7 @@ import edu.java.hibernatetask.repository.TraineeRepository;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
+import edu.java.hibernatetask.service.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,7 @@ public class TraineeRepositoryImpl implements TraineeRepository {
     private static Logger logger = LoggerFactory.getLogger(TraineeRepositoryImpl.class);
 
     @Override
-    public Optional<Trainee> save(Trainee trainee) {
+    public Optional<Trainee> create(Trainee trainee) {
         try {
 
             entityManager.persist(trainee);
@@ -38,7 +39,7 @@ public class TraineeRepositoryImpl implements TraineeRepository {
     }
 
     @Override
-    public Optional<Trainee> getTraineeByUserName(String userName) {
+    public Optional<Trainee> getTraineeByUserName(String userName) throws DBException {
         Query query = entityManager.createQuery("SELECT t FROM Trainee as t WHERE t.user.userName = :userName", Trainee.class);
         query.setParameter("userName", userName);
         Trainee trainee = null;
@@ -46,6 +47,7 @@ public class TraineeRepositoryImpl implements TraineeRepository {
             trainee = (Trainee) query.getSingleResult();
         } catch (NoResultException e) {
             logger.error("No such Trainee present in the database with userName {}", userName);
+            throw new DBException("No such Trainee present in the database with userName " + userName, e);
         }
         return trainee != null ? Optional.of(trainee) : Optional.empty();
     }
@@ -99,8 +101,21 @@ public class TraineeRepositoryImpl implements TraineeRepository {
     }
 
     @Override
-    public void deleteByUsername(String Username) {
+    public void delete(Trainee trainee) throws DBException {
 
+        Trainee traineeFromDB = entityManager.find(Trainee.class, trainee.getId());
+
+        if(traineeFromDB == null){
+            logger.error("Fail to delete, no trainee with userName {} in DB ", trainee.getUser().getUserName());
+            throw new DBException("Fail to delete, no trainee with userName {} in DB " + trainee.getUser().getUserName());
+        }
+
+        try{
+            entityManager.remove(traineeFromDB );
+        } catch (Exception e){
+            logger.error("No such entity Trainee managed by entityManager, id {}", trainee.getId());
+            throw new DBException("No such entity Trainee managed by entityManager, id " + trainee.getId(), e);
+        }
     }
 
     @Override

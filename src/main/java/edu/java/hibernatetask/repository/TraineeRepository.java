@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TraineeRepository {
-    Optional<Trainee> save(Trainee trainee);
-    Optional<Trainee> getTraineeByUserName(String userName);
-    Optional<Trainee> changePassword(Trainee trainee);
+    Optional<Trainee> create(Trainee trainee);
     Optional<Trainee> update(Trainee trainer);
+    void delete(Trainee trainee) throws DBException;
+    Optional<Trainee> getTraineeByUserName(String userName) throws DBException;
+    Optional<Trainee> changePassword(Trainee trainee);
     boolean changeStatus(Trainee trainee) throws DBException;
-    void deleteByUsername(String Username);
     List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType);
     Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList);
 }

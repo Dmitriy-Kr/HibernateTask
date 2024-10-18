@@ -11,12 +11,12 @@ import java.util.Optional;
 
 public interface TraineeService {
     Optional<Trainee> save(Trainee trainee);
-    Optional<Trainee> usernameAndPasswordMatching(String userName, String password);
-    Optional<Trainee> getTraineeByUserName(String userName);
+    Optional<Trainee> usernameAndPasswordMatching(String userName, String password) throws ServiceException;
+    Optional<Trainee> getTraineeByUserName(String userName) throws ServiceException;
     Optional<Trainee> changePassword(Trainee trainee);
     Optional<Trainee> update(Trainee trainer);
     boolean changeStatus(Trainee trainee) throws ServiceException;
-    void deleteByUsername(String Username);
+    void deleteByUsername(String Username) throws ServiceException;
     List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType);
     Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList);
 }
