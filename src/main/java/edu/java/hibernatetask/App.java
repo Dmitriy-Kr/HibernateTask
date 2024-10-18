@@ -138,6 +138,20 @@ public class App
 
             System.out.println(traineeService.update(trainee));
 
+        System.out.println("---------------------------------- Trainee change status  -----------------------------------------\n");
+
+        trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        System.out.println(trainee);
+
+        try {
+            System.out.println(traineeService.changeStatus(trainee));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
+        System.out.println(trainee);
+
 //        entityManager.close();
 //        entityManagerFactory.close();
     }

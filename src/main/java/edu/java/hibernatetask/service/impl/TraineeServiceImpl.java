@@ -4,7 +4,9 @@ import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
+import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TraineeRepository;
+import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TraineeService;
 import edu.java.hibernatetask.service.UserService;
 import org.springframework.stereotype.Service;
@@ -60,8 +62,12 @@ public class TraineeServiceImpl implements TraineeService {
     }
 
     @Override
-    public boolean changeStatus(Trainee trainee) {
-        return false;
+    public boolean changeStatus(Trainee trainee) throws ServiceException {
+        try {
+            return traineeRepository.changeStatus(trainee);
+        } catch (DBException e) {
+            throw new ServiceException("Fail to change status", e);
+        }
     }
 
     @Override

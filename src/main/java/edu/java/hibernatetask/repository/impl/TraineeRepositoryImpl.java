@@ -1,6 +1,7 @@
 package edu.java.hibernatetask.repository.impl;
 
 import edu.java.hibernatetask.entity.*;
+import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TraineeRepository;
 
 import javax.persistence.*;
@@ -81,8 +82,20 @@ public class TraineeRepositoryImpl implements TraineeRepository {
     }
 
     @Override
-    public boolean changeStatus(Trainee trainee) {
-        return false;
+    public boolean changeStatus(Trainee trainee) throws DBException {
+        Trainee traineeFromDB = entityManager.find(Trainee.class, trainee.getId());
+        if (traineeFromDB != null) {
+
+            traineeFromDB.getUser().setIsActive(!traineeFromDB.getUser().isActive());
+
+            trainee = entityManager.merge(traineeFromDB);
+
+        } else {
+            logger.error("No such Trainee present in the database with id {}", trainee.getId());
+            throw new DBException("No such Trainee present in the database with id " + trainee.getId());
+        }
+
+        return trainee.getUser().isActive();
     }
 
     @Override
