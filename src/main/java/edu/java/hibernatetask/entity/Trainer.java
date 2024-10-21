@@ -20,10 +20,10 @@ public class Trainer{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_user_id")
     private User user;
-    @ManyToMany(mappedBy = "trainers", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "trainers")
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Trainee> trainees = new ArrayList<>();
-    @OneToMany(mappedBy = "trainer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "trainer")
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Training> trainings = new ArrayList<>();
 
@@ -98,8 +98,6 @@ public class Trainer{
                 "id=" + id +
                 ", specialization=" + specialization +
                 ", user=" + user +
-//                ", trainees=" + trainees.size() +
-                ", trainings=" + trainings +
                 '}';
     }
 }

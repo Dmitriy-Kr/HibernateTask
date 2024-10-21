@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,17 +96,17 @@ public class TraineeServiceImpl implements TraineeService {
             logger.error("Fail to delete trainee with userName {} from DB ", username);
             throw new ServiceException("Fail to delete trainee from DB with userName" + username, e);
         }
-        try {
-            traineeRepository.delete(traineeFromDB.get());
-        } catch (DBException e) {
-            logger.error("Fail to delete trainee with userName {} from DB ", username);
-            throw new ServiceException("Fail to delete trainee from DB with userName" + username, e);
-        }
     }
 
     @Override
-    public List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType) {
-        return null;
+    public List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType) throws ServiceException {
+
+        try {
+            return traineeRepository.getTrainings(traineeUsername, fromDate, toDate, trainerName, trainingType);
+        } catch (DBException e) {
+            logger.error("Fail to get trainee trainings from DB - userName {} ", traineeUsername);
+            throw new ServiceException("Fail to get trainee trainings from DB - userName " + traineeUsername, e);
+        }
     }
 
     @Override

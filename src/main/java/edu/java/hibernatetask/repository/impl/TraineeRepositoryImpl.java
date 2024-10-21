@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -76,7 +78,7 @@ public class TraineeRepositoryImpl implements TraineeRepository {
             traineeFromDB.setAddress(trainee.getAddress());
 
             trainee = entityManager.merge(traineeFromDB);
-        } else{
+        } else {
             return Optional.empty();
         }
 
@@ -105,22 +107,38 @@ public class TraineeRepositoryImpl implements TraineeRepository {
 
         Trainee traineeFromDB = entityManager.find(Trainee.class, trainee.getId());
 
-        if(traineeFromDB == null){
+        if (traineeFromDB == null) {
             logger.error("Fail to delete, no trainee with userName {} in DB ", trainee.getUser().getUserName());
-            throw new DBException("Fail to delete, no trainee with userName {} in DB " + trainee.getUser().getUserName());
+            throw new DBException("Fail to delete, no trainee in DB with userName  " + trainee.getUser().getUserName());
         }
 
-        try{
-            entityManager.remove(traineeFromDB );
-        } catch (Exception e){
+        try {
+            entityManager.remove(traineeFromDB);
+        } catch (Exception e) {
             logger.error("No such entity Trainee managed by entityManager, id {}", trainee.getId());
             throw new DBException("No such entity Trainee managed by entityManager, id " + trainee.getId(), e);
         }
     }
 
     @Override
-    public List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType) {
-        return null;
+    public List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType) throws DBException {
+        Query query = entityManager.createQuery("SELECT t FROM Trainee as t JOIN FETCH t.trainings WHERE t.user.userName = :userName", Trainee.class);
+        query.setParameter("userName", traineeUsername);
+
+        try {
+
+
+            Trainee trainee = (Trainee) query.getSingleResult();
+
+            return trainee.getTrainings().stream()
+                    .filter(t -> t.getTrainingDay().compareTo(fromDate) >= 0 && t.getTrainingDay().compareTo(toDate) <= 0)
+                    .filter(t -> t.getTrainer().getUser().getFirstName().equals(trainerName))
+                    .filter(t -> t.getTrainingType().equals(trainingType))
+                    .collect(Collectors.toList());
+        } catch (NoResultException e) {
+            logger.error("No such Trainee present in the database with userName {}", traineeUsername);
+            throw new DBException("No such Trainee present in the database with userName " + traineeUsername, e);
+        }
     }
 
     @Override

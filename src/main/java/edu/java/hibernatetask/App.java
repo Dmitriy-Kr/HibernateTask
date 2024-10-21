@@ -188,7 +188,8 @@ public class App {
         trainer = trainerService.getTrainerByUserName("Kathleen.Carr").get();
         System.out.println(trainer);
 
-        System.out.println("---------------------------------- Remove Trainee  -----------------------------------------\n");
+
+        System.out.println("---------------------------------- Delete Trainee  -----------------------------------------\n");
 
         try {
             trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
@@ -206,9 +207,20 @@ public class App {
         try {
             trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
         } catch (ServiceException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
+        System.out.println("---------------------------------- Get Trainee Trainings List  -----------------------------------------\n");
+
+        try {
+            System.out.println(traineeService.getTrainings("Shannon.Velazquez",
+                    Date.valueOf(LocalDate.parse("2024-10-21")),
+                    Date.valueOf(LocalDate.parse("2024-11-21")),
+                    "Ward",
+                    new TrainingType(1L, "yoga")));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
 //        entityManager.close();
 //        entityManagerFactory.close();
