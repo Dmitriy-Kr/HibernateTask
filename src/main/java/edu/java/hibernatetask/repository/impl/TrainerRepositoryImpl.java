@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -102,8 +103,22 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     }
 
     @Override
-    public List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName) {
-        return null;
+    public List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName) throws DBException {
+        Query query = entityManager.createQuery("SELECT t FROM Trainer as t JOIN FETCH t.trainings WHERE t.user.userName = :trainerUsername", Trainer.class);
+        query.setParameter("trainerUsername", trainerUsername);
+
+        try {
+            Trainer trainer = (Trainer) query.getSingleResult();
+
+            return trainer.getTrainings().stream()
+                    .filter(t -> t.getTrainingDay().compareTo(fromDate) >= 0 && t.getTrainingDay().compareTo(toDate) <= 0)
+                    .filter(t -> t.getTrainee().getUser().getFirstName().equals(traineeName))
+                    .collect(Collectors.toList());
+
+        } catch (NoResultException e) {
+            logger.error("No such Trainer present in the database with userName {}", trainerUsername);
+            throw new DBException("No such Trainer present in the database with userName " + trainerUsername, e);
+        }
     }
 
     @Override

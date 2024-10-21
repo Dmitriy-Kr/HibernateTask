@@ -21,10 +21,8 @@ public class Trainer{
     @JoinColumn(name = "gym_user_id")
     private User user;
     @ManyToMany(mappedBy = "trainers")
-    @Fetch(value = FetchMode.SUBSELECT)
     private List<Trainee> trainees = new ArrayList<>();
     @OneToMany(mappedBy = "trainer")
-    @Fetch(value = FetchMode.SUBSELECT)
     private List<Training> trainings = new ArrayList<>();
 
     public Trainer() {

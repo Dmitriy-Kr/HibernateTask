@@ -126,8 +126,6 @@ public class TraineeRepositoryImpl implements TraineeRepository {
         query.setParameter("userName", traineeUsername);
 
         try {
-
-
             Trainee trainee = (Trainee) query.getSingleResult();
 
             return trainee.getTrainings().stream()
@@ -135,6 +133,7 @@ public class TraineeRepositoryImpl implements TraineeRepository {
                     .filter(t -> t.getTrainer().getUser().getFirstName().equals(trainerName))
                     .filter(t -> t.getTrainingType().equals(trainingType))
                     .collect(Collectors.toList());
+
         } catch (NoResultException e) {
             logger.error("No such Trainee present in the database with userName {}", traineeUsername);
             throw new DBException("No such Trainee present in the database with userName " + traineeUsername, e);

@@ -222,6 +222,17 @@ public class App {
             e.printStackTrace();
         }
 
+        System.out.println("---------------------------------- Get Trainer Trainings List  -----------------------------------------\n");
+
+        try {
+            System.out.println(trainerService.getTrainings("Ward.Mejia",
+                    Date.valueOf(LocalDate.parse("2024-09-29")),
+                    Date.valueOf(LocalDate.parse("2024-11-22")),
+                    "Shannon"));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
 //        entityManager.close();
 //        entityManagerFactory.close();
     }

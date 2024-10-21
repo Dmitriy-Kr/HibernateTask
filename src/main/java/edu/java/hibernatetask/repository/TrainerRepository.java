@@ -13,6 +13,6 @@ public interface TrainerRepository {
         Optional<Trainer> changePassword(Trainer trainer);
         Optional<Trainer> update(Trainer trainer);
         boolean changeStatus(Trainer trainer) throws DBException;
-        List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName);
+        List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName) throws DBException;
         List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername);
 }

@@ -87,8 +87,13 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName) {
-        return null;
+    public List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName) throws ServiceException {
+        try {
+            return trainerRepository.getTrainings(trainerUsername, fromDate, toDate, traineeName);
+        } catch (DBException e) {
+            logger.error("Fail to get trainer trainings from DB - userName {} ", trainerUsername);
+            throw new ServiceException("Fail to get trainer trainings from DB - userName " + trainerUsername, e);
+        }
     }
 
     @Override
