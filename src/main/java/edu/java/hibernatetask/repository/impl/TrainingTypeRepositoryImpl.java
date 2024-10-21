@@ -2,6 +2,7 @@ package edu.java.hibernatetask.repository.impl;
 
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.TrainingType;
+import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainingTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
     private static Logger logger = LoggerFactory.getLogger(TrainerRepositoryImpl.class);
 
     @Override
-    public Optional<TrainingType> getByName(String trainingTypeName) {
+    public Optional<TrainingType> getByName(String trainingTypeName) throws DBException {
         Query query = entityManager.createQuery("SELECT t FROM TrainingType as t WHERE t.trainingType = :trainingTypeName", TrainingType.class);
         query.setParameter("trainingTypeName", trainingTypeName);
         TrainingType trainingType = null;
@@ -32,6 +33,7 @@ public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
             trainingType = (TrainingType) query.getSingleResult();
         } catch (NoResultException e) {
             logger.error("No such Training type present in the database with name {}", trainingTypeName);
+            throw new DBException("No such Training type present in the database with name " + trainingTypeName, e);
         }
         return trainingType != null ? Optional.of(trainingType) : Optional.empty();
     }

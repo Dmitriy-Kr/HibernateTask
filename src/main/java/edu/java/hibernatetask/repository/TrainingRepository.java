@@ -5,5 +5,5 @@ import edu.java.hibernatetask.entity.Training;
 import java.util.Optional;
 
 public interface TrainingRepository {
-    Optional<Training> save(Training training);
+    Optional<Training> create(Training training) throws DBException;
 }

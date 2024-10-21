@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TrainerRepository {
-        Optional<Trainer> save(Trainer trainer);
-        Optional<Trainer> getTrainerByUserName(String userName);
+        Optional<Trainer> create(Trainer trainer) throws DBException;
+        Optional<Trainer> getTrainerByUserName(String userName) throws DBException;
         Optional<Trainer> changePassword(Trainer trainer);
         Optional<Trainer> update(Trainer trainer);
         boolean changeStatus(Trainer trainer) throws DBException;

@@ -5,7 +5,6 @@ import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainerRepository;
-import edu.java.hibernatetask.repository.impl.TrainerRepositoryImpl;
 import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TrainerService;
 import edu.java.hibernatetask.service.TrainingTypeService;
@@ -36,14 +35,19 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public Optional<Trainer> save(Trainer trainer) {
+    public Optional<Trainer> save(Trainer trainer) throws ServiceException {
         trainer.getUser().setUserName(createValidUserName(trainer));
         trainer.getUser().setPassword(generatePassword());
-        return trainerRepository.save(trainer);
+        try {
+            return trainerRepository.create(trainer);
+        } catch (DBException e) {
+            logger.error("Error saving Trainer in the database with username {}", trainer.getUser().getUserName());
+            throw new ServiceException("Error saving Trainer in the database", e);
+        }
     }
 
     @Override
-    public Optional<Trainer> usernameAndPasswordMatching(String userName, String password) {
+    public Optional<Trainer> usernameAndPasswordMatching(String userName, String password) throws ServiceException {
         Optional<Trainer> trainer = getTrainerByUserName(userName);
         if(trainer.isPresent()){
             if(password.equals(trainer.get().getUser().getPassword())){
@@ -54,8 +58,13 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public Optional<Trainer> getTrainerByUserName(String userName) {
-        return trainerRepository.getTrainerByUserName(userName);
+    public Optional<Trainer> getTrainerByUserName(String username) throws ServiceException {
+        try {
+            return trainerRepository.getTrainerByUserName(username);
+        } catch (DBException e) {
+            logger.error("No such Trainer present in the database with userName {}", username);
+            throw new ServiceException("No such Trainer present in the database with userName " + username, e);
+        }
     }
 
     @Override

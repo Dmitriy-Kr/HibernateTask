@@ -28,7 +28,7 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     private static Logger logger = LoggerFactory.getLogger(TrainerRepositoryImpl.class);
 
     @Override
-    public Optional<Trainer> save(Trainer trainer) {
+    public Optional<Trainer> create(Trainer trainer) throws DBException {
         try {
 
             entityManager.persist(trainer);
@@ -36,21 +36,21 @@ public class TrainerRepositoryImpl implements TrainerRepository {
             return Optional.of(trainer);
 
         } catch (Exception e) {
-            logger.error("Error save Trainer in the database", e);
-            e.printStackTrace();
+            logger.error("Error saving Trainer in the database", e);
+            throw new DBException("Error saving Trainer in the database ");
         }
-        return Optional.empty();
     }
 
     @Override
-    public Optional<Trainer> getTrainerByUserName(String userName) {
-        Query query = entityManager.createQuery("SELECT t FROM Trainer as t WHERE t.user.userName = :userName", Trainer.class);
-        query.setParameter("userName", userName);
+    public Optional<Trainer> getTrainerByUserName(String username) throws DBException {
+        Query query = entityManager.createQuery("SELECT t FROM Trainer as t WHERE t.user.userName = :username", Trainer.class);
+        query.setParameter("username", username);
         Trainer trainer = null;
         try {
             trainer = (Trainer) query.getSingleResult();
         } catch (NoResultException e){
-            logger.error("No such Trainer present in the database with userName {}", userName);
+            logger.error("No such Trainer present in the database with userName {}", username);
+            throw new DBException("No such Trainer present in the database with userName " + username);
         }
         return trainer != null ? Optional.of(trainer) : Optional.empty();
     }

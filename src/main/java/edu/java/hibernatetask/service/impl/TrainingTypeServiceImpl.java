@@ -1,7 +1,9 @@
 package edu.java.hibernatetask.service.impl;
 
 import edu.java.hibernatetask.entity.TrainingType;
+import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainingTypeRepository;
+import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TrainingTypeService;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,12 @@ public class TrainingTypeServiceImpl implements TrainingTypeService {
     }
 
     @Override
-    public Optional<TrainingType> getByName(String trainingType) {
-        return trainingTypeRepository.getByName(trainingType);
+    public Optional<TrainingType> getByName(String trainingType) throws ServiceException {
+        try {
+            return trainingTypeRepository.getByName(trainingType);
+        } catch (DBException e) {
+            throw new ServiceException("Fail to get from DB trainingType " + trainingType, e);
+        }
     }
 
     @Override

@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TrainerService {
-        Optional<Trainer> save(Trainer trainer);
-        Optional<Trainer> usernameAndPasswordMatching(String userName, String password);
-        Optional<Trainer> getTrainerByUserName(String userName);
+        Optional<Trainer> save(Trainer trainer) throws ServiceException;
+        Optional<Trainer> usernameAndPasswordMatching(String userName, String password) throws ServiceException;
+        Optional<Trainer> getTrainerByUserName(String userName) throws ServiceException;
         Optional<Trainer> changePassword(Trainer trainer);
         Optional<Trainer> update(Trainer trainer) throws ServiceException;
         boolean changeStatus(Trainer trainer) throws ServiceException;

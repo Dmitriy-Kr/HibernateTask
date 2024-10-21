@@ -108,7 +108,9 @@ INSERT INTO trainee_trainer (trainee_id, trainer_id) VALUES
 	(2, 5),
 	(3, 3),
 	(4, 1),
-	(5, 4);
+	(5, 4),
+	(5, 3),
+	(5, 1);
 
 INSERT INTO Training (training_id, trainee_id, trainer_id, trainingName, trainingType_id, trainingDay, trainingDuration) VALUES
 	(1, 1, 2, 'aerobics', 2, '2024-03-21', 150),
@@ -117,4 +119,5 @@ INSERT INTO Training (training_id, trainee_id, trainer_id, trainingName, trainin
 	(4, 4, 1, 'vinyasa', 1, '2024-09-30', 150),
 	(5, 5, 4, 'dynamic stretching', 4, '2024-11-07', 60),
 	(6, 5, 3, 'Zumba step', 3, '2024-10-27', 60),
-	(7, 5, 1, 'vinyasa', 1, '2024-11-21', 120);
+	(7, 5, 1, 'vinyasa', 1, '2024-11-21', 120),
+	(8, 5, 1, 'vinyasa', 1, '2024-11-22', 120);

@@ -6,7 +6,6 @@ import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TraineeRepository;
-import edu.java.hibernatetask.repository.impl.TraineeRepositoryImpl;
 import edu.java.hibernatetask.service.ServiceException;
 import edu.java.hibernatetask.service.TraineeService;
 import edu.java.hibernatetask.service.UserService;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
