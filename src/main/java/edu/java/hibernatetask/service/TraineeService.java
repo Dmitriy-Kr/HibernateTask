@@ -18,5 +18,5 @@ public interface TraineeService {
     boolean changeStatus(Trainee trainee) throws ServiceException;
     void deleteByUsername(String Username) throws ServiceException;
     List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType) throws ServiceException;
-    Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList);
+    Optional<Trainee> updateTrainersList(String traineeUsername, List<Trainer> trainersList) throws ServiceException;
 }

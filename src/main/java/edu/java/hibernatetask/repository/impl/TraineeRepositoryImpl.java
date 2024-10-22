@@ -142,6 +142,20 @@ public class TraineeRepositoryImpl implements TraineeRepository {
 
     @Override
     public Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList) {
-        return Optional.empty();
+
+        Trainee traineeFromDB = entityManager.find(Trainee.class, trainee.getId());
+
+        if (traineeFromDB != null) {
+
+            traineeFromDB.setTrainers(trainersList);
+
+            traineeFromDB = entityManager.merge(traineeFromDB);
+
+        } else {
+            logger.info("No such Trainee present in the database with id {}", trainee.getId());
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(traineeFromDB);
     }
 }

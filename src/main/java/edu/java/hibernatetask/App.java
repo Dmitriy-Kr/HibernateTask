@@ -9,6 +9,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -293,6 +295,25 @@ public class App {
 
         try {
             System.out.println(trainerService.getNotAssignedOnTraineeTrainersByTraineeUsername("Shannon.Velazquez"));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("--------------- Update Tranee's trainers list -------------\n");
+
+        List<Trainer> trainerList = new ArrayList<>();
+
+        user = new User();
+        user.setUserName("Ward.Mejia");
+        trainer = new Trainer();
+        trainer.setUser(user);
+
+        trainerList.add(trainer);
+
+        try {
+            System.out.println(traineeService.getTraineeByUserName("Igor.Gura").get().getTrainers());
+
+            System.out.println(traineeService.updateTrainersList("Igor.Gura", trainerList).get().getTrainers());
         } catch (ServiceException e) {
             e.printStackTrace();
         }

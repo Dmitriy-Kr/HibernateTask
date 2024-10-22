@@ -17,5 +17,5 @@ public interface TraineeRepository {
     Optional<Trainee> changePassword(Trainee trainee);
     boolean changeStatus(Trainee trainee) throws DBException;
     List<Training> getTrainings(String traineeUsername, Date fromDate, Date toDate, String trainerName, TrainingType trainingType) throws DBException;
-    Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList);
+    Optional<Trainee> updateTrainersList(Trainee trainee, List<Trainer> trainersList) throws DBException;
 }

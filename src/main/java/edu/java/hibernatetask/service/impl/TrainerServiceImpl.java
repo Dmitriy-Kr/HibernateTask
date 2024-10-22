@@ -9,6 +9,7 @@ import edu.java.hibernatetask.repository.TrainerRepository;
 import edu.java.hibernatetask.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -30,7 +31,7 @@ public class TrainerServiceImpl implements TrainerService {
     public TrainerServiceImpl(TrainerRepository trainerRepository,
                               UserService userService,
                               TrainingTypeService trainingTypeService,
-                              TraineeService traineeService) {
+                              @Lazy TraineeService traineeService) {
         this.trainerRepository = trainerRepository;
         this.userService = userService;
         this.trainingTypeService = trainingTypeService;
