@@ -14,11 +14,11 @@
         <!-- avoid duplicated logs with additivity=false -->
         <Logger name="edu.java.hibernatetask" level="info" additivity="false">
             <AppenderRef ref="LogToFile"/>
-            <AppenderRef ref="LogToConsole"/>
+<!--            <AppenderRef ref="LogToConsole"/>-->
         </Logger>
         <Root level="error">
             <AppenderRef ref="LogToFile"/>
-            <AppenderRef ref="LogToConsole"/>
+<!--            <AppenderRef ref="LogToConsole"/>-->
         </Root>
     </Loggers>
 </Configuration>

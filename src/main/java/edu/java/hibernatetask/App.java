@@ -2,8 +2,10 @@ package edu.java.hibernatetask;
 
 import edu.java.hibernatetask.config.SpringConfig;
 import edu.java.hibernatetask.entity.*;
-import edu.java.hibernatetask.service.*;
-import edu.java.hibernatetask.service.impl.TrainingServiceImpl;
+import edu.java.hibernatetask.service.ServiceException;
+import edu.java.hibernatetask.service.TraineeService;
+import edu.java.hibernatetask.service.TrainerService;
+import edu.java.hibernatetask.service.TrainingService;
 import edu.java.hibernatetask.utility.PasswordGenerator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -13,22 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Hello world!
- */
 public class App {
     public static void main(String[] args) {
-//        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
-//        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
 
         TrainerService trainerService = context.getBean("trainerServiceImpl", TrainerService.class);
-//        UserService userService = context.getBean("userServiceImpl", UserService.class);
-//
-//        System.out.println(userService.getUserByUserName("Coleman.Yates"));
 
-        System.out.println("Hello World!");
+        System.out.println("\n----------------- Create Trainer ------------------------------------------------\n");
+
         Trainer trainer = new Trainer();
         trainer.setSpecialization(new TrainingType(2L, "fitness"));
         User user = new User();
@@ -46,7 +41,7 @@ public class App {
         System.out.println("trainer id = " + trainer.getId());
         System.out.println("trainer user id = " + trainer.getUser().getId());
 
-        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("\n----------------------- Create Trainee ----------------------------------------------------\n");
 
         TraineeService traineeService = context.getBean("traineeServiceImpl", TraineeService.class);
 
@@ -65,39 +60,39 @@ public class App {
         System.out.println("trainee id = " + trainee.getId());
         System.out.println("trainee user id = " + trainee.getUser().getId());
 
-        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("\n--------------------------- Find trainee by username ------------------------------------------------\n");
         try {
-            System.out.println("Find trainee " + (traineeService.getTraineeByUserName("Mari.Doyle").get().getUser().getPassword()));
+            System.out.println("Found trainee: " + (traineeService.getTraineeByUserName("Mari.Doyle").get()));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
 
-        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("\n------------------------------- Trainee username and password matching --------------------------------------------\n");
         Optional<Trainee> optionalTrainee = null;
         try {
             optionalTrainee = traineeService.usernameAndPasswordMatching("Mari.Doyle", "1753799703");
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Match trainee userName and password  " + (optionalTrainee.isPresent() ? optionalTrainee.get().getUser().getPassword() : "No matching!!!"));
+        System.out.println("Match trainee username and password for username " + (optionalTrainee.isPresent() ? optionalTrainee.get().getUser().getUserName() : "No matching!!!"));
 
-        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("\n----------------------------------- Find trainer by username ----------------------------------------\n");
         try {
-            System.out.println("Find trainer " + (trainerService.getTrainerByUserName("Coleman.Yates").get().getUser().getPassword()));
+            System.out.println("Find trainer " + (trainerService.getTrainerByUserName("Coleman.Yates").get()));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
 
-        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("\n--------------------------------- Trainer username and password matching ------------------------------------------\n");
         Optional<Trainer> optionalTrainer = null;
         try {
             optionalTrainer = trainerService.usernameAndPasswordMatching("Coleman.Yates", "4415125129");
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        System.out.println("Match trainer userName and password  " + (optionalTrainer.isPresent() ? optionalTrainer.get().getUser().getPassword() : "No matching!!!"));
+        System.out.println("Match trainer userName and password for username  " + (optionalTrainer.isPresent() ? optionalTrainer.get().getUser().getUserName() : "No matching!!!"));
 
-        System.out.println("----------------------------------Trainee Change password-----------------------------------------");
+        System.out.println("\n----------------------------------Trainee Change password-----------------------------------------\n");
 
         try {
             trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
@@ -108,22 +103,9 @@ public class App {
         String password = PasswordGenerator.generatePassword();
         System.out.println("New password for " + trainee.getUser().getUserName() + "   " + password);
         trainee.getUser().setPassword(password);
-        System.out.println(traineeService.changePassword(trainee));
+        System.out.println(traineeService.changePassword(trainee).get());
 
-        System.out.println("----------------------------------Trainer Change password-----------------------------------------");
-
-        try {
-            trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-        System.out.println(trainer);
-        password = PasswordGenerator.generatePassword();
-        System.out.println("New password for " + trainer.getUser().getUserName() + "   " + password);
-        trainer.getUser().setPassword(password);
-        System.out.println(trainerService.changePassword(trainer));
-
-        System.out.println("----------------------------------Trainer Change password-----------------------------------------");
+        System.out.println("\n----------------------------------Trainer Change password-----------------------------------------\n");
 
         try {
             trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
@@ -134,9 +116,22 @@ public class App {
         password = PasswordGenerator.generatePassword();
         System.out.println("New password for " + trainer.getUser().getUserName() + "   " + password);
         trainer.getUser().setPassword(password);
-        System.out.println(trainerService.changePassword(trainer));
+        System.out.println(trainerService.changePassword(trainer).get());
 
-        System.out.println("----------------------------------Trainer update-----------------------------------------\n");
+        System.out.println("\n----------------------------------Trainer Change password-----------------------------------------\n");
+
+        try {
+            trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+        System.out.println(trainer);
+        password = PasswordGenerator.generatePassword();
+        System.out.println("New password for " + trainer.getUser().getUserName() + "   " + password);
+        trainer.getUser().setPassword(password);
+        System.out.println(trainerService.changePassword(trainer).get());
+
+        System.out.println("\n----------------------------------Trainer update-----------------------------------------\n");
 
         try {
             trainer = trainerService.getTrainerByUserName("Coleman.Yates").get();
@@ -151,12 +146,12 @@ public class App {
         trainer.getSpecialization().setTrainingType("resistance");
 
         try {
-            System.out.println(trainerService.update(trainer));
+            System.out.println(trainerService.update(trainer).get());
         } catch (ServiceException e) {
             e.printStackTrace();
         }
 
-        System.out.println("---------------------------------- Trainee update -----------------------------------------\n");
+        System.out.println("\n---------------------------------- Trainee update -----------------------------------------\n");
 
         try {
             trainee = traineeService.getTraineeByUserName("Mari.Doyle").get();
@@ -172,7 +167,7 @@ public class App {
         trainee.setDateOfBirth(Date.valueOf(LocalDate.parse("2005-10-16")));
         trainee.setAddress("Serova st, 256, ap 45");
 
-        System.out.println(traineeService.update(trainee));
+        System.out.println(traineeService.update(trainee).get());
 
         System.out.println("---------------------------------- Trainee change status  -----------------------------------------\n");
 
@@ -196,7 +191,7 @@ public class App {
         }
         System.out.println(trainee);
 
-        System.out.println("---------------------------------- Trainer change status  -----------------------------------------\n");
+        System.out.println("\n---------------------------------- Trainer change status  -----------------------------------------\n");
 
         try {
             trainer = trainerService.getTrainerByUserName("Kathleen.Carr").get();
@@ -219,7 +214,7 @@ public class App {
         System.out.println(trainer);
 
 
-        System.out.println("---------------------------------- Delete Trainee  -----------------------------------------\n");
+        System.out.println("\n---------------------------------- Delete Trainee  -----------------------------------------\n");
 
         try {
             trainee = traineeService.getTraineeByUserName("Dave.Batista").get();
@@ -240,30 +235,30 @@ public class App {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("---------------------------------- Get Trainee Trainings List  -----------------------------------------\n");
+        System.out.println("\n---------------------------------- Get Trainee Trainings List  -----------------------------------------\n");
 
         try {
             System.out.println(traineeService.getTrainings("Shannon.Velazquez",
                     Date.valueOf(LocalDate.parse("2024-10-21")),
                     Date.valueOf(LocalDate.parse("2024-11-21")),
                     "Ward",
-                    new TrainingType(1L, "yoga")));
+                    new TrainingType(1L, "yoga")).get());
         } catch (ServiceException e) {
             e.printStackTrace();
         }
 
-        System.out.println("---------------------------------- Get Trainer Trainings List  -----------------------------------------\n");
+        System.out.println("\n---------------------------------- Get Trainer Trainings List  -----------------------------------------\n");
 
         try {
             System.out.println(trainerService.getTrainings("Ward.Mejia",
                     Date.valueOf(LocalDate.parse("2024-09-29")),
                     Date.valueOf(LocalDate.parse("2024-11-22")),
-                    "Shannon"));
+                    "Shannon").get());
         } catch (ServiceException e) {
             e.printStackTrace();
         }
 
-        System.out.println("---------------------------------- Add Training  -----------------------------------------\n");
+        System.out.println("\n---------------------------------- Add Training  -----------------------------------------\n");
 
         TrainingService trainingService = context.getBean("trainingServiceImpl", TrainingService.class);
 
@@ -286,12 +281,12 @@ public class App {
         training.setTrainer(trainer);
 
         try {
-            System.out.println(trainingService.create(training));
+            System.out.println(trainingService.create(training).get());
         } catch (ServiceException e) {
             e.printStackTrace();
         }
 
-        System.out.println("--------------- Get trainers list that not assigned on trainee by trainee's username----------\n");
+        System.out.println("\n--------------- Get trainers list that not assigned on trainee by trainee's username----------\n");
 
         try {
             System.out.println(trainerService.getNotAssignedOnTraineeTrainersByTraineeUsername("Shannon.Velazquez"));
@@ -299,7 +294,7 @@ public class App {
             e.printStackTrace();
         }
 
-        System.out.println("--------------- Update Tranee's trainers list -------------\n");
+        System.out.println("\n--------------- Update Tranee's trainers list -------------\n");
 
         List<Trainer> trainerList = new ArrayList<>();
 
@@ -318,7 +313,5 @@ public class App {
             e.printStackTrace();
         }
 
-//        entityManager.close();
-//        entityManagerFactory.close();
     }
 }
