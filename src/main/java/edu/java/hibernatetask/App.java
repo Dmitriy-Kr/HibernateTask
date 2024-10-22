@@ -242,7 +242,7 @@ public class App {
                     Date.valueOf(LocalDate.parse("2024-10-21")),
                     Date.valueOf(LocalDate.parse("2024-11-21")),
                     "Ward",
-                    new TrainingType(1L, "yoga")).get());
+                    new TrainingType(1L, "yoga")));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
@@ -253,7 +253,7 @@ public class App {
             System.out.println(trainerService.getTrainings("Ward.Mejia",
                     Date.valueOf(LocalDate.parse("2024-09-29")),
                     Date.valueOf(LocalDate.parse("2024-11-22")),
-                    "Shannon").get());
+                    "Shannon"));
         } catch (ServiceException e) {
             e.printStackTrace();
         }
