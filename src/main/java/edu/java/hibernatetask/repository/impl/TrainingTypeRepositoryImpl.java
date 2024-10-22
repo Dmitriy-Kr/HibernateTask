@@ -1,6 +1,5 @@
 package edu.java.hibernatetask.repository.impl;
 
-import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainingTypeRepository;
@@ -46,7 +45,7 @@ public class TrainingTypeRepositoryImpl implements TrainingTypeRepository {
 
     @Override
     public List<TrainingType> getAll() {
-        Query jpqlQuery = entityManager.createQuery("SELECT * FROM TrainingType as t");
+        Query jpqlQuery = entityManager.createQuery("SELECT t FROM TrainingType as t");
         List<TrainingType> trainingTypes = jpqlQuery.getResultList();
         return trainingTypes;
     }

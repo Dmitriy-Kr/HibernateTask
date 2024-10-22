@@ -10,6 +10,8 @@ import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.Scanner;
+
 @Configuration
 @ComponentScan("edu.java.hibernatetask")
 //@PropertySource("classpath:application.properties")
@@ -26,5 +28,10 @@ public class SpringConfig {
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
+    }
+
+    @Bean
+    public Scanner getScanner(){
+        return new Scanner(System.in);
     }
 }
