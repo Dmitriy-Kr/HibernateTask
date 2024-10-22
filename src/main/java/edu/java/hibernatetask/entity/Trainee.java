@@ -24,13 +24,12 @@ public class Trainee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_user_id")
     private User user;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @ManyToMany
     @JoinTable(name = "trainee_trainer",
-    joinColumns = @JoinColumn(name = "trainee_id"),
-    inverseJoinColumns = @JoinColumn(name = "trainer_id"))
+            joinColumns = @JoinColumn(name = "trainee_id"),
+            inverseJoinColumns = @JoinColumn(name = "trainer_id"))
     private List<Trainer> trainers = new ArrayList<>();
-    @OneToMany(mappedBy = "trainee", cascade =  CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Training> trainings = new ArrayList<>();
 

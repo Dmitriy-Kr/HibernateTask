@@ -42,7 +42,7 @@ public class TraineeRepositoryImpl implements TraineeRepository {
 
     @Override
     public Optional<Trainee> getTraineeByUserName(String userName) throws DBException {
-        Query query = entityManager.createQuery("SELECT t FROM Trainee as t WHERE t.user.userName = :userName", Trainee.class);
+        Query query = entityManager.createQuery("SELECT t FROM Trainee as t JOIN FETCH t.trainers WHERE t.user.userName = :userName", Trainee.class);
         query.setParameter("userName", userName);
         Trainee trainee = null;
         try {

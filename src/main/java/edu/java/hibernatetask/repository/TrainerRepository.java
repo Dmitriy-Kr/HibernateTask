@@ -14,5 +14,6 @@ public interface TrainerRepository {
         Optional<Trainer> update(Trainer trainer);
         boolean changeStatus(Trainer trainer) throws DBException;
         List<Training> getTrainings(String trainerUsername, Date fromDate, Date toDate, String traineeName) throws DBException;
+        List<Trainer> getAll() throws DBException;
         List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername);
 }

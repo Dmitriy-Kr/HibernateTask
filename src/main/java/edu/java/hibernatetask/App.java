@@ -269,7 +269,7 @@ public class App {
         training.setTrainingDay(Date.valueOf(LocalDate.parse("2024-10-25")));
         training.setTrainingName("dynamic stretching");
         training.setTrainingDuration(45);
-        training.setTrainingType(new TrainingType(4L, "stretching"));
+        training.setTrainingType(new TrainingType("stretching"));
 
         user = new User();
         user.setUserName("Igor.Gura");
@@ -289,6 +289,13 @@ public class App {
             e.printStackTrace();
         }
 
+        System.out.println("--------------- Get trainers list that not assigned on trainee by trainee's username----------\n");
+
+        try {
+            System.out.println(trainerService.getNotAssignedOnTraineeTrainersByTraineeUsername("Shannon.Velazquez"));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
 
 //        entityManager.close();
 //        entityManagerFactory.close();

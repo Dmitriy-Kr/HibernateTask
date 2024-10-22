@@ -122,6 +122,21 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     }
 
     @Override
+    public List<Trainer> getAll() throws DBException {
+        Query query = entityManager.createQuery("SELECT t FROM Trainer as t", Trainer.class);
+
+        try {
+            List<Trainer> result = query.getResultList();
+
+            return result;
+
+        } catch (Exception e) {
+            logger.error("Cannot get trainers from the database");
+            throw new DBException("Cannot get trainers from the database", e);
+        }
+    }
+
+    @Override
     public List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername) {
         return null;
     }

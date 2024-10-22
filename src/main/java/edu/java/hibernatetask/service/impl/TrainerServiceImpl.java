@@ -1,14 +1,12 @@
 package edu.java.hibernatetask.service.impl;
 
+import edu.java.hibernatetask.entity.Trainee;
 import edu.java.hibernatetask.entity.Trainer;
 import edu.java.hibernatetask.entity.Training;
 import edu.java.hibernatetask.entity.TrainingType;
 import edu.java.hibernatetask.repository.DBException;
 import edu.java.hibernatetask.repository.TrainerRepository;
-import edu.java.hibernatetask.service.ServiceException;
-import edu.java.hibernatetask.service.TrainerService;
-import edu.java.hibernatetask.service.TrainingTypeService;
-import edu.java.hibernatetask.service.UserService;
+import edu.java.hibernatetask.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,13 +23,18 @@ public class TrainerServiceImpl implements TrainerService {
     private TrainerRepository trainerRepository;
     private UserService userService;
     private TrainingTypeService trainingTypeService;
+    private TraineeService traineeService;
 
     private static Logger logger = LoggerFactory.getLogger(TrainerServiceImpl.class);
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository, UserService userService, TrainingTypeService trainingTypeService) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository,
+                              UserService userService,
+                              TrainingTypeService trainingTypeService,
+                              TraineeService traineeService) {
         this.trainerRepository = trainerRepository;
         this.userService = userService;
         this.trainingTypeService = trainingTypeService;
+        this.traineeService = traineeService;
     }
 
     @Override
@@ -106,8 +109,28 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername) {
-        return null;
+    public List<Trainer> getNotAssignedOnTraineeTrainersByTraineeUsername(String traineeUsername) throws ServiceException {
+        Optional<Trainee> traineeFromDB = traineeService.getTraineeByUserName(traineeUsername);
+
+        List<Trainer> traineeTrainers = null;
+        List<Trainer> trainers = null;
+
+        if(traineeFromDB.isPresent()){
+            traineeTrainers = traineeFromDB.get().getTrainers();
+        } else {
+            throw new ServiceException("Fail to get trainers list by trainee name from DB");
+        }
+
+        try {
+            trainers = trainerRepository.getAll();
+        } catch (DBException e) {
+            logger.error("Fail to get trainers from DB");
+            throw new ServiceException("Fail to get trainers from DB", e);
+        }
+
+        trainers.removeAll(traineeTrainers);
+
+        return trainers;
     }
 
     private String createValidUserName(Trainer trainer) {
