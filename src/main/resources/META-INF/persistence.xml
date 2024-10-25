@@ -16,14 +16,20 @@
 
         <properties>
             <property name="hibernate.jdbc.time_zone" value="UTC"/>
-<!--            <property name ="hibernate.show_sql" value = "true" />-->
+            <property name="hibernate.show_sql" value = "true" />
+            <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
+            <property name="hibernate.hbm2ddl.import_files_sql_extractor" value="org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor" />
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/gymcrm"/>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:postgresql://localhost:5432/gymcrm?createDatabaseIfNotExist=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
             <property name="javax.persistence.jdbc.user" value="postgres"/>
             <property name="javax.persistence.jdbc.password" value="K50ABseries"/>
-            <property name="javax.persistence.schema-generation.database.action" value="none"/>
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
             <property name="javax.persistence.sql-load-script-source" value="data.sql"/>
+            <property name="javax.persistence.schema-generation.drop-script-source" value="drop.sql" />
+            <property name="javax.persistence.schema-generation.create-source" value="script"/>
+            <property name="javax.persistence.schema-generation.create-script-source" value="schema.sql" />
         </properties>
     </persistence-unit>
 </persistence>
